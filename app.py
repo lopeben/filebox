@@ -85,8 +85,12 @@ app.config['ALLOWED_EXTENSIONS'] = {
     'mp4', 'avi', 'mkv', 'mov', 'wmv', 'flv', 'webm', 'm4v',
     # Code
     'py', 'js', 'html', 'css', 'json', 'xml', 'yaml', 'yml', 'md', 'sh', 'bat',
+    # Geographic data
+    'geojson', 'kml', 'kmz',
+    # Personal info
+    'ics', 'vcf',
     # Other
-    'csv', 'sql', 'log', 'ini', 'cfg', 'conf'
+    'csv', 'sql', 'log', 'ini', 'cfg', 'conf', 'gpx'
 }
 app.config['USER_CREDENTIALS_FILE'] = config['USER_CREDENTIALS_FILE']
 app.secret_key = config['SECRET_KEY']

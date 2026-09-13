@@ -181,7 +181,41 @@ sudo systemctl reload nginx
 
 Nginx’s reverse proxy docs cover `proxy_pass`, forwarded headers, and upstream behavior. citeturn10search91
 
-### 3.2 Optional: wildcard subdomains
+### 3.2 Upload Limits Configuration
+
+**Nginx Upload Limits:**
+Add these directives to your nginx server block to handle large file uploads:
+
+```nginx
+server {
+    listen 80;
+    server_name filebox.brains.local;
+    
+    # Configure upload limits for large file uploads
+    client_max_body_size 2000M;
+    client_body_timeout 300s;
+    client_header_timeout 300s;
+    
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        # Increase proxy timeouts for large uploads
+        proxy_connect_timeout 300s;
+        proxy_send_timeout 300s;
+        proxy_read_timeout 300s;
+    }
+}
+```
+
+**Application Upload Limits:**
+Filebox upload limits are configured in `config.txt`:
+```
+MAX_CONTENT_LENGTH=2000  # Total upload size in MB
+MAX_FILE_SIZE=100        # Individual file size in MB
+```
+
+> **Note:** Nginx default upload limit is only 1MB. Without these settings, you'll get "413 Request Entity Too Large" errors for large file uploads.
+
+### 3.3 Optional: wildcard subdomains
 
 You can add more subdomains with additional `server` blocks (e.g., `api.brains.local`), or use a wildcard:
 
@@ -189,6 +223,7 @@ You can add more subdomains with additional `server` blocks (e.g., `api.brains.l
 server {
     listen 80;
     server_name *.brains.local;
+    client_max_body_size 2000M;
     location / { proxy_pass http://127.0.0.1:8000; }
 }
 ```
